@@ -44,7 +44,11 @@ cd <ameri-frontend>
 
 2. **Install dependencies**
 ```bash
-npm install
+npm install axios
+npm install postcss@latest
+npm install bootstrap
+npm install bootstrap-icons
+npm install react-bootstrap bootstrap
 ```
 
 3. **Start the development server**

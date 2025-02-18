@@ -1,0 +1,82 @@
+body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    transition: background 0.5s ease;
+}
+
+.navbar {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.1);
+}
+
+.hover-gradient {
+    transition: color 0.3s ease;
+}
+
+.hover-gradient:hover {
+    color: #ff416c;
+}
+
+.card {
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.1);
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px #ff416c, 0 0 20px #ff416c;
+    }
+    50% {
+        box-shadow: 0 0 20px #ff4b2b, 0 0 30px #ff4b2b;
+    }
+}
+
+.pulse-animate {
+    animation: pulse 2s infinite;
+}
+  
+
+
+
+
+

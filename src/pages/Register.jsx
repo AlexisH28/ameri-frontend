@@ -3,7 +3,6 @@ import { registerUser } from '../api/AuthApi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-// Reducer to handle form state
 const formReducer = (state, action) => {
     return { ...state, [action.field]: action.value };
 };
@@ -38,7 +37,7 @@ function Register() {
         try {
             await registerUser(formState);
             toast.success('User registered successfully!');
-            navigate('/login');  
+            navigate('/login'); 
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed.');
             toast.error('Registration failed.');

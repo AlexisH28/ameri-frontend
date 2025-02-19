@@ -12,8 +12,9 @@ const Profile = lazy(() => import('./pages/Profile'));
 const Loader = () => (
   <div className="text-center mt-5">
     <div className="spinner-border text-primary" role="status">
-      <span className="visually-hidden">Loading...</span>
+      <span className="visually-hidden">Cargando la aplicación...</span>
     </div>
+    <p className="mt-3 text-muted">Por favor, espera un momento...</p>
   </div>
 );
 
@@ -24,9 +25,13 @@ function App() {
         <Navbar />
         <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />
@@ -40,6 +45,3 @@ function App() {
 }
 
 export default App;
-
-
-

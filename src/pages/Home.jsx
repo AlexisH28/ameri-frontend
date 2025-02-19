@@ -6,6 +6,7 @@ import Post from '../components/Post';
 import PostModal from '../components/PostModal';
 import PostSortService from '../api/PostSortService';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -17,7 +18,6 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // Get real-time posts from the Backend
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -25,8 +25,8 @@ function Home() {
                 setPosts(response.data);
                 setFilteredPosts(response.data);
             } catch (err) {
-                setError('Error al obtener las publicaciones. Inténtalo nuevamente.');
-                toast.error('Error al obtener las publicaciones.');
+                setError('Error fetching posts. Please try again.');
+                toast.error('Error fetching posts.');
             } finally {
                 setLoading(false);
             }
@@ -57,20 +57,20 @@ function Home() {
             if (currentPost) {
                 const response = await api.put(`/posts/${currentPost.id}`, newPost);
                 setPosts(posts.map(post => post.id === currentPost.id ? { ...post, ...response.data } : post));
-                toast.success('Publicación actualizada con éxito.');
+                toast.success('Post updated successfully.');
             } else {
                 const response = await api.post('/posts', newPost);
                 setPosts([response.data, ...posts]);
-                toast.success('Publicación creada con éxito.');
+                toast.success('Post created successfully.');
             }
         } catch (err) {
-            toast.error('Error al guardar la publicación. Inténtalo nuevamente.');
+            toast.error('Error saving post. Please try again.');
         }
         handleCloseModal();
     };
 
     const deletePost = async (postId) => {
-        const confirmed = window.confirm('¿Estás seguro de que quieres eliminar esta publicación?');
+        const confirmed = window.confirm('Are you sure you want to delete this post?');
         if (confirmed) {
             try {
                 const postElement = document.getElementById(`post-${postId}`);
@@ -78,10 +78,10 @@ function Home() {
                 setTimeout(async () => {
                     await api.delete(`/posts/${postId}`);
                     setPosts(posts.filter(post => post.id !== postId));
-                    toast.success('Publicación eliminada con éxito.');
+                    toast.success('Post deleted successfully.');
                 }, 500);
             } catch (err) {
-                toast.error('Error al eliminar la publicación.');
+                toast.error('Error deleting post.');
             }
         }
     };
@@ -95,9 +95,9 @@ function Home() {
 
             setPosts(sortedPosts);
             setSortOrder(type);
-            toast.info(`Ordenado por ${type === 'likes' ? 'Likes' : type === 'asc' ? 'Más Antiguos' : 'Más Recientes'}.`);
+            toast.info(`Sorted by ${type === 'likes' ? 'Likes' : type === 'asc' ? 'Oldest' : 'Newest'}.`);
         } catch (error) {
-            toast.error('Error al ordenar las publicaciones.');
+            toast.error('Error sorting posts.');
         }
     };
 
@@ -105,39 +105,39 @@ function Home() {
         <div className="container mt-5">
             <div className="text-center mb-5">
                 <h1 className="text-danger">Ameri & Duki Fan Zone</h1>
-                <p className="lead">Comparte tu pasión con otros fans 🔥</p>
+                <p className="lead">Share your passion with other fans 🔥</p>
 
                 <input 
                     type="text" 
                     className="form-control mb-3"
-                    placeholder="Buscar publicaciones..."
+                    placeholder="Search posts..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
 
                 <div className="btn-group mb-3">
                     <button className={`btn ${sortOrder === 'desc' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => handleSort('desc')}>
-                        Más Recientes
+                        Newest
                     </button>
                     <button className={`btn ${sortOrder === 'asc' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => handleSort('asc')}>
-                        Más Antiguos
+                        Oldest
                     </button>
                     <button className={`btn ${sortOrder === 'likes' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => handleSort('likes')}>
-                        Más Populares
+                        Most Popular
                     </button>
                 </div>
 
                 <button className="btn btn-success" onClick={() => handleShowModal()}>
-                    Crear Publicación
+                    Create Post
                 </button>
             </div>
 
             {loading ? (
-                <p className="text-center">Cargando publicaciones...</p>
+                <p className="text-center">Loading posts...</p>
             ) : error ? (
                 <p className="text-danger text-center">{error}</p>
             ) : filteredPosts.length === 0 ? (
-                <p className="text-muted text-center">No hay publicaciones disponibles.</p>
+                <p className="text-muted text-center">No posts available.</p>
             ) : (
                 <div className="row">
                     {filteredPosts.map(post => (

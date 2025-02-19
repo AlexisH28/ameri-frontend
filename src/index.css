@@ -1,11 +1,32 @@
-body {
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    backdrop-filter: blur(10px);
-    color: #ffffff;
-    font-family: 'Arial', sans-serif;
-    transition: background 0.5s ease;
+/* ==============================
+Global Styles
+============================== */
+* {
+    font-family: "Poppins", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
+body {
+    transition: background 0.5s ease, color 0.5s ease;
+    overflow-x: hidden;
+}
+
+/* Light Mode */
+body.light-mode {
+    background: linear-gradient(to right, #f5f5f5, #e8e8e8);
+    color: #222;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+}
+
+/* ==============================
+Navbar Styles
+============================== */
 .navbar {
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -25,37 +46,99 @@ body {
     transform: scale(1.1);
 }
 
+/* Toggle Dark/Light Mode */
+.btn-toggle-mode {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: inherit;
+    transition: transform 0.3s;
+}
+
+.btn-toggle-mode:hover {
+    transform: rotate(30deg);
+}
+
+/* Effects on Navbar Links */
 .hover-gradient {
+    position: relative;
     transition: color 0.3s ease;
+    text-decoration: none;
 }
 
-.hover-gradient:hover {
-    color: #ff416c;
+.hover-gradient:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    transition: transform 0.3s ease;
+    transform: scaleX(0);
+    transform-origin: right;
 }
 
+.hover-gradient:hover:before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* ==============================
+Card Styles (Publications, Profiles)
+============================== */
 .card {
     backdrop-filter: blur(5px);
     border-radius: 20px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
+    overflow: hidden;
+}
+
+/* Light Mode Cards */
+body.light-mode .card {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Mode Cards */
+body.dark-mode .card {
+    background: #2c2c2c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
 .card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(1.02);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
 }
 
+/* ==============================
+Button Styles
+============================== */
 .btn-primary {
     background: linear-gradient(45deg, #6a11cb, #2575fc);
     border: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
+    color: #fff;
 }
 
 .btn-primary:hover {
     transform: scale(1.1);
 }
 
+body.light-mode .btn-primary {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+}
+
+body.dark-mode .btn-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+}
+
+/* ==============================
+Animations & Effects
+============================== */
 .fade-out {
     opacity: 0;
     transform: translateX(50px);
@@ -74,9 +157,18 @@ body {
 .pulse-animate {
     animation: pulse 2s infinite;
 }
-  
 
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-
-
-
+.fade-in-scale {
+    animation: fadeInScale 0.4s ease-in-out;
+}

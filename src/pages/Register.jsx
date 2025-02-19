@@ -1,73 +1,93 @@
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import { registerUser } from '../api/AuthApi';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+// Reducer to handle form state
+const formReducer = (state, action) => {
+    return { ...state, [action.field]: action.value };
+};
 
 function Register() {
-    const [userData, setUserData] = useState({
+    const [formState, dispatch] = useReducer(formReducer, {
         fullName: '',
         username: '',
         email: '',
         password: ''
     });
 
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setUserData({
-        ...userData,
-        [e.target.name]: e.target.value
-        });
+        dispatch({ field: e.target.name, value: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-        await registerUser(userData);
-        setSuccess('User registered successfully!');
+        setLoading(true);
         setError('');
-        } catch (error) {
-        setError(error.message || 'Registration failed.');
+
+        if (!formState.fullName || !formState.username || !formState.email || !formState.password) {
+            setError('All fields are required.');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await registerUser(formState);
+            toast.success('User registered successfully!');
+            navigate('/login');  
+        } catch (err) {
+            setError(err.response?.data?.message || 'Registration failed.');
+            toast.error('Registration failed.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="container text-center mt-5">
-        <h1 className="text-danger">Register</h1>
-        {error && <p className="text-danger">{error}</p>}
-        {success && <p className="text-success">{success}</p>}
-        <form onSubmit={handleSubmit}>
-            <input type="text" name="fullName"
-                placeholder="Full Name"
-                value={userData.fullName}
-                onChange={handleChange}
-                className="form-control mb-3"
-            />
-            <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                value={userData.username}
-                onChange={handleChange}
-                className="form-control mb-3"
-            />
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={userData.email}
-                onChange={handleChange}
-                className="form-control mb-3"
-            />
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={userData.password}
-                onChange={handleChange}
-                className="form-control mb-3"
-            />
-            <button className="btn btn-primary" type="submit">Register</button>
-        </form>
+            <h1 className="text-danger">Register</h1>
+            {error && <p className="text-danger">{error}</p>}
+            <form onSubmit={handleSubmit} className="shadow-lg p-4 rounded">
+                <input 
+                    type="text" 
+                    name="fullName"
+                    placeholder="Full Name"
+                    value={formState.fullName}
+                    onChange={handleChange}
+                    className="form-control mb-3"
+                />
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={formState.username}
+                    onChange={handleChange}
+                    className="form-control mb-3"
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formState.email}
+                    onChange={handleChange}
+                    className="form-control mb-3"
+                />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formState.password}
+                    onChange={handleChange}
+                    className="form-control mb-3"
+                />
+                <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+                    {loading ? <span className="spinner-border spinner-border-sm"></span> : 'Register'}
+                </button>
+            </form>
         </div>
     );
 }
